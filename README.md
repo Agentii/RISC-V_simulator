@@ -6,6 +6,12 @@ This repository contains a Python Simulator for the RV32I Base Instruction
 Set (Excluding the instructions: `fence`, `fence.i`, `ebreak`, `csrrw`, 
 `csrrs`, `csrrc`, `csrrwi`, `csrrsi`, `csrrci`)
 
+The simulator was created as part of the 
+[last assignment](https://github.com/schoeberl/cae-lab/tree/master/finasgmt) 
+of the course 
+[Computer Architecture and Engineering](http://www2.imm.dtu.dk/courses/02155/)
+at DTU (Technical University of Denmark).
+
 
 ### How it works
 1. The simulator's parser reads a binary file containing the instructions
