@@ -26,7 +26,7 @@ class ECALL(EnvOperation):
         register = kwargs['register']
         PC = kwargs['PC']
         self.op(register)
-        return PC
+        exit("ECALL: Program terminated")
 
 
 class Environment(Instruction):

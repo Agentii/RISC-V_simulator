@@ -9,12 +9,14 @@ class SOperation:
     def __init__(self, imm4_0, rs1, rs2, imm11_5, op):
         self.rs1, self.rs2 = rs1, rs2
         self.imm = (imm11_5 << 5) + imm4_0
+        sign = 1 if self.imm < 0 else 0
+        self.imm = (self.imm << 19 * sign) + (self.imm * sign)
         self.op = op
 
     def __repr__(self):
         return self.__class__.__name__ + " %s, %d(%s)" % (registerNames[self.rs2],
-                                                          registerNames[self.rs1],
-                                                          self.imm)
+                                                          self.imm,
+                                                          registerNames[self.rs1])
 
     def execute(self, **kwargs):
         register = kwargs['register']
@@ -27,13 +29,13 @@ class SOperation:
 class SB(SOperation):
 
     def __init__(self, imm4_0, rs1, rs2, imm11_5):
-        super().__init__(imm4_0, rs1, rs2, imm11_5, lambda x: x & 0xF)
+        super().__init__(imm4_0, rs1, rs2, imm11_5, lambda x: x & 0xFF)
 
 
 class SH(SOperation):
 
     def __init__(self, imm4_0, rs1, rs2, imm11_5):
-        super().__init__(imm4_0, rs1, rs2, imm11_5, lambda x: x & 0xFF)
+        super().__init__(imm4_0, rs1, rs2, imm11_5, lambda x: x & 0xFFFF)
 
 
 class SW(SOperation):

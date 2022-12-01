@@ -11,6 +11,7 @@ class Parser:
     def parseFile(self, filePath):
         with open(filePath, mode='rb') as file:
             file = file.read()
+        print(unpack("<"+"i" * (len(file) // 4), file))
         instructionCodeList = map(int, unpack("i" * (len(file) // 4), file))
         self._generateProgram(instructionCodeList)
 

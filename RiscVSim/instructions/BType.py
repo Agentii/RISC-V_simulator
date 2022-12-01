@@ -20,7 +20,7 @@ class BOperation:
         register = kwargs['register']
         PC = kwargs['PC']
         if self.op(register[self.rs1], register[self.rs2]):
-            PC += self.imm + 4
+            PC += self.imm - 4
         return PC
 
 

@@ -5,8 +5,6 @@ class PC(int):
     def __init__(self):
         self.__new__(int, 0)
 
-    def incrementBy(self, val):
-        self.__new__(int, self + val)
 
 class Simulator:
 
@@ -37,11 +35,13 @@ class Simulator:
         print(lineSep + "\n" + header + "\n" + lineSep)
         for instr in self.program:
             print(str(instr) + "\t" + str(instr.getOperation()))
+        print("\n")
 
     def run(self):
         while True:
             instr = self.memory.loadInstruction(self.PC)
-            if instr == 0:
+            if type(instr) == int:
+                print(self.register)
                 break
             self.PC = instr.getOperation().execute(register=self.register, memory=self.memory, PC=self.PC)
             self.PC += 4

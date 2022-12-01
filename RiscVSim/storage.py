@@ -34,9 +34,8 @@ class Register:
         return self.register[item]
 
     def __setitem__(self, key, value):
-        if type(key) is int and 0 <= key < 32:
-            if key != 0:
-                self.register[key] = value
+        if type(key) is int and 0 < key < 32:
+            self.register[key] = value
 
     def __repr__(self):
         lineSep = "-"*21

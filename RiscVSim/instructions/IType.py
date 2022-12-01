@@ -64,7 +64,7 @@ class ANDI(IOperation):
 class SLLI(IOperation):
 
     def __init__(self, rd, rs1, shamt):
-        super().__init__(rd, rs1, shamt, lambda x, y: (x << y) & ((1 << x.bit_length()) - 1))
+        super().__init__(rd, rs1, shamt, lambda x, y: (x << y) & ((1 << 32) - 1))
 
 
 class SRLI(IOperation):
@@ -79,59 +79,54 @@ class SRAI(IOperation):
         super().__init__(rd, rs1, shamt, operator.__rshift__)
 
 
-class LB(IOperation):
+class LoadOperation(IOperation):
 
-    def __init__(self, rd, rs1, imm):
-        super().__init__(rd, rs1, imm, lambda x: x & 0xF)
+    def __init__(self, rd, rs1, imm, op):
+        sign = 1 if imm < 0 else 0
+        imm = (imm << 19*sign) + (imm*sign)
+        super().__init__(rd, rs1, imm, op)
+
+    def __repr__(self):
+        return self.__class__.__name__ + " %s, %d(%s)" % (registerNames[self.rd],
+                                                          self.imm,
+                                                          registerNames[self.rs1])
 
     def execute(self, **kwargs):
-        self.executeLoad(kwargs['register'], kwargs['memory'])
+        register = kwargs['register']
+        memory = kwargs['memory']
         PC = kwargs['PC']
+        register[self.rd] = self.op(memory[register[self.rs1] + self.imm])
         return PC
 
 
-class LH(IOperation):
+class LB(LoadOperation):
 
     def __init__(self, rd, rs1, imm):
-        super().__init__(rd, rs1, imm, lambda x: x & 0xFF)
-
-    def execute(self, **kwargs):
-        self.executeLoad(kwargs['register'], kwargs['memory'])
-        PC = kwargs['PC']
-        return PC
+        super().__init__(rd, rs1, imm, lambda x: (v := x & 0xFF, v if v < 2**7 else (-2**7)-(2**7-v))[-1])
 
 
-class LW(IOperation):
+class LH(LoadOperation):
+
+    def __init__(self, rd, rs1, imm):
+        super().__init__(rd, rs1, imm, lambda x: (v := x & 0xFFFF, v if v < 2**15 else (-2**15)-(2**15-v))[-1])
+
+
+class LW(LoadOperation):
 
     def __init__(self, rd, rs1, imm):
         super().__init__(rd, rs1, imm, lambda x: x)
 
-    def execute(self, **kwargs):
-        self.executeLoad(kwargs['register'], kwargs['memory'])
-        PC = kwargs['PC']
-        return PC
 
-
-class LBU(IOperation):
+class LBU(LoadOperation):
 
     def __init__(self, rd, rs1, imm):
-        super().__init__(rd, rs1, imm, lambda x: (x & 0xffffffff) & 0xF)
-
-    def execute(self, **kwargs):
-        self.executeLoad(kwargs['register'], kwargs['memory'])
-        PC = kwargs['PC']
-        return PC
+        super().__init__(rd, rs1, imm, lambda x: (x & 0xFFFFFFFF) & 0xFF)
 
 
-class LHU(IOperation):
+class LHU(LoadOperation):
 
     def __init__(self, rd, rs1, imm):
-        super().__init__(rd, rs1, imm, lambda x: (x & 0xffffffff) & 0xFF)
-
-    def execute(self, **kwargs):
-        self.executeLoad(kwargs['register'], kwargs['memory'])
-        PC = kwargs['PC']
-        return PC
+        super().__init__(rd, rs1, imm, lambda x: (x & 0xFFFFFFFF) & 0xFFFF)
 
 
 class IType(Instruction):

@@ -37,7 +37,7 @@ class SUB(ROperation):
 class SLL(ROperation):
 
     def __init__(self, rd, rs1, rs2):
-        super().__init__(rd, rs1, rs2, lambda x, y: (x << y) & ((1 << x.bit_length()) - 1))
+        super().__init__(rd, rs1, rs2, lambda x, y: (x << y) & ((1 << 32) - 1))
 
 
 class SLT(ROperation):

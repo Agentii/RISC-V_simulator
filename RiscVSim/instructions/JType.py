@@ -19,7 +19,7 @@ class JOperation:
         register = kwargs['register']
         PC = kwargs['PC']
         register[self.rd] = PC + 4
-        PC += self.imm
+        PC += self.imm - 4
         return PC
 
 
@@ -38,7 +38,7 @@ class JALR(IOperation):
         register = kwargs['register']
         PC = kwargs['PC']
         register[self.rd] = PC + 4
-        PC += (register[self.rs1] + self.imm) & (~0x1)
+        PC = ((register[self.rs1] + self.imm) >> 1 << 1) - 4
         return PC
 
 class JType(Instruction):
