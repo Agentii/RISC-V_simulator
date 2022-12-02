@@ -95,7 +95,8 @@ class LoadOperation(IOperation):
         register = kwargs['register']
         memory = kwargs['memory']
         PC = kwargs['PC']
-        register[self.rd] = self.op(memory[register[self.rs1] + self.imm])
+        word = memory.loadWord(register[self.rs1] + self.imm)
+        register[self.rd] = self.op(word)
         return PC
 
 

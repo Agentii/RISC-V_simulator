@@ -1,7 +1,4 @@
-
 from struct import unpack
-from instructions.instructionBits import getOpcode
-from instructions.instruction import instructionTypes
 from instructions.constructor import createInstruction
 
 class Parser:
@@ -11,15 +8,12 @@ class Parser:
     def parseFile(self, filePath):
         with open(filePath, mode='rb') as file:
             file = file.read()
-        instructionCodeList = map(int, unpack("i" * (len(file) // 4), file))
+        instructionCodeList = map(int, unpack("<"+"i" * (len(file) // 4), file))
         self._generateProgram(instructionCodeList)
 
     def _generateProgram(self, instructionCodeList):
         self.program = Program()
         for instrCode in instructionCodeList:
-            opcode = getOpcode(instrCode)
-            if opcode not in instructionTypes.keys():
-                continue
             instruction = createInstruction(instrCode)
             self.program.addInstruction(instruction)
 

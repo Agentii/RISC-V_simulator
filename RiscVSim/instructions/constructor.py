@@ -10,6 +10,8 @@ from instructions.instruction import instructionTypes
 
 def createInstruction(instructionCode):
     opcode = getOpcode(instructionCode)
+    if opcode not in instructionTypes.keys():
+        return instructionCode
     instructionType = instructionTypes[opcode]
     instruction = None
     if instructionType == "R-type":

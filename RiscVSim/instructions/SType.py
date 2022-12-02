@@ -18,18 +18,18 @@ class SOperation:
                                                           self.imm,
                                                           registerNames[self.rs1])
 
-    def execute(self, **kwargs):
-        register = kwargs['register']
-        memory = kwargs['memory']
-        PC = kwargs['PC']
-        memory[register[self.rs1] + self.imm] = self.op(register[self.rs2])
-        return PC
-
 
 class SB(SOperation):
 
     def __init__(self, imm4_0, rs1, rs2, imm11_5):
         super().__init__(imm4_0, rs1, rs2, imm11_5, lambda x: x & 0xFF)
+
+    def execute(self, **kwargs):
+        register = kwargs['register']
+        memory = kwargs['memory']
+        PC = kwargs['PC']
+        memory.storeByte(register[self.rs1] + self.imm, self.op(register[self.rs2]))
+        return PC
 
 
 class SH(SOperation):
@@ -37,12 +37,25 @@ class SH(SOperation):
     def __init__(self, imm4_0, rs1, rs2, imm11_5):
         super().__init__(imm4_0, rs1, rs2, imm11_5, lambda x: x & 0xFFFF)
 
+    def execute(self, **kwargs):
+        register = kwargs['register']
+        memory = kwargs['memory']
+        PC = kwargs['PC']
+        memory.storeHalfword(register[self.rs1] + self.imm, self.op(register[self.rs2]))
+        return PC
+
 
 class SW(SOperation):
 
     def __init__(self, imm4_0, rs1, rs2, imm11_5):
         super().__init__(imm4_0, rs1, rs2, imm11_5, lambda x: x)
 
+    def execute(self, **kwargs):
+        register = kwargs['register']
+        memory = kwargs['memory']
+        PC = kwargs['PC']
+        memory.storeWord(register[self.rs1] + self.imm, self.op(register[self.rs2]))
+        return PC
 
 class SType(Instruction):
 
