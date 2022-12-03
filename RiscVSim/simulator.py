@@ -17,7 +17,7 @@ class Simulator:
     def __init__(self):
         self.parser = Parser()
         self.register = Register()
-        self.memory = Memory(1_048_576*32)  # 1 MB
+        self.memory = Memory(1_048_576*20)  # 1*20 MB (times 20 because of an error when loading immediates)
 
     def loadProgram(self, filePath):
         self.parser.parseFile(filePath)

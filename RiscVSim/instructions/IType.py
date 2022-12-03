@@ -21,9 +21,6 @@ class IOperation:
         register[self.rd] = self.op(register[self.rs1], self.imm)
         return PC
 
-    def executeLoad(self, register, memory):
-        register[self.rd] = self.op(memory[register[self.rs1] + self.imm])
-
 
 class ADDI(IOperation):
 

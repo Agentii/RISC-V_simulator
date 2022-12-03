@@ -40,29 +40,28 @@ class Memory(list):
                 super().__setitem__(pos+i, word)
 
 
-class Register:
+class Register(dict):
 
     registerNames = ["zero", "ra", "sp", "gp", "tp", "t0", "t1", "t2", "s0", "s1"] + \
                     ["a" + str(i) for i in range(8)] + \
                     ["s" + str(i) for i in range(2, 12)] + \
                     ["t" + str(i) for i in range(3, 7)]
-    register = None
 
     def __init__(self):
-        self.register = dict.fromkeys(range(32), 0)
+        super().__init__(dict.fromkeys(range(32), 0))
 
     def __getitem__(self, item):
-        return self.register[item]
+        return super().__getitem__(item)
 
     def __setitem__(self, key, value):
         if type(key) is int and 0 < key < 32:
-            self.register[key] = value
+            super().__setitem__(key, value)
 
     def __repr__(self):
         lineSep = "-"*21
         header = "%s\nRegister%sValue\n%s" % (lineSep, " "*8, lineSep)
         content = ""
-        for k, v in self.register.items():
+        for k, v in self.items():
             regName = self.registerNames[k] + " (x%d)" % k
             content += "%s%s%s\n" % (regName, " "*(16-len(regName)), hex(v & 0xffffffff))
         return "%s\n%s" % (header, content)
