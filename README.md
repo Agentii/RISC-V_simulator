@@ -40,7 +40,13 @@ in the console.
 ### Usage
 - *The program runs from `main.py`.*
 
-
-- To run the program, add the path to your binary file to the **path** variable in 
-`main.py`.
+#### Run from IDE
+- To run the program from an IDE, add the path to your binary file to the **path** 
+variable in `main.py`.
 - Then, start the program by running `main.py`.
+
+#### Run from command line
+- To run the program from a command line, run the following command from the 
+directory of `main.py`
+
+<code>python main.py >>Your test file path<< </code>
